@@ -15,8 +15,8 @@ using optional_value_t = OptionalData;
 
 class BaseStorage {
    public:
-    BaseStorage() {}
-    virtual ~BaseStorage() {}
+    BaseStorage() = default;
+    virtual ~BaseStorage() = default;
 
     virtual bool Set(const key_t &key, const value_t &value) = 0;
     [[nodiscard]] virtual std::optional<value_t> Get(const key_t &key) = 0;
