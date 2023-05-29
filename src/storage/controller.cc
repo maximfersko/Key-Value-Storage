@@ -45,11 +45,23 @@ std::string Controller::TTL(const key_t &key) {
 }
 
 unsigned int Controller::Upload(const std::string &filename) {
-    return key_value_storage_->Upload(filename);
+    unsigned int str_cout = 0;
+    try {
+        str_cout = key_value_storage_->Upload(filename);
+    } catch (const std::invalid_argument &e) {
+        std::cerr << e.what() << '\n';
+    }
+    return str_cout;
 }
 
 unsigned int Controller::Export(const std::string &filename) {
-    return key_value_storage_->Export(filename);
+    unsigned int str_cout = 0;
+    try {
+        str_cout = key_value_storage_->Export(filename);
+    } catch (const std::invalid_argument &e) {
+        std::cerr << e.what() << '\n';
+    }
+    return str_cout;
 }
 
 void Controller::DeleteOldData() { key_value_storage_->DeleteOldData(); }

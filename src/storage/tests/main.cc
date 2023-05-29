@@ -10,18 +10,19 @@ const storage::value_t John("John", "Doe", 1995, "New York", 6789L, 4);
 const storage::value_t Jane("Jane", "Doe", 1997, "Los Angeles", 3200L, 12);
 const storage::value_t Alice("Alice", "Smith", 1990, "Chicago", 1500L, 6);
 const storage::value_t Bob("Bob", "Johnson", 1985, "Houston", 2450L, 7);
-const storage::value_t Mary("Mary", "Williams", 1982, "Philadelphia", 1234L, 95);
+const storage::value_t Mary("Mary", "Williams", 1982, "Philadelphia", 1234L,
+                            95);
 
 const storage::optional_value_t Jane_opt(std::nullopt, "Jane", std::nullopt,
-                                     std::nullopt, 0, std::nullopt);
-const storage::optional_value_t John_opt("John", "Doe", std::nullopt, "New York",
-                                     6789L, std::nullopt);
+                                         std::nullopt, 0, std::nullopt);
+const storage::optional_value_t John_opt("John", "Doe", std::nullopt,
+                                         "New York", 6789L, std::nullopt);
 const storage::optional_value_t Alice_opt("Alice", "Smith", 1990, "Chicago",
-                                      std::nullopt, 85);
+                                          std::nullopt, 85);
 const storage::optional_value_t Bob_opt("Bob", "Johnson", 1985, std::nullopt,
-                                    std::nullopt, std::nullopt);
-const storage::optional_value_t Mary_opt("Mary", "Williams", 1982, "Philadelphia",
-                                     1234L, 95);
+                                        std::nullopt, std::nullopt);
+const storage::optional_value_t Mary_opt("Mary", "Williams", 1982,
+                                         "Philadelphia", 1234L, 95);
 
 const storage::key_t first_key = "doctor";
 const storage::key_t second_key = "lawyer";
@@ -89,7 +90,8 @@ TEST(first_suite, get_all_keys) {
     storage.Set(first_key, John);
     storage.Set(second_key, Jane);
     storage.Set(third_key, Alice);
-    std::vector<storage::key_t> expected_keys = {first_key, second_key, third_key};
+    std::vector<storage::key_t> expected_keys = {first_key, second_key,
+                                                 third_key};
     std::sort(expected_keys.begin(), expected_keys.end());
     ASSERT_EQ(storage.Keys(), expected_keys);
 }
@@ -108,7 +110,7 @@ TEST(first_suite_tree, TTL_tree) {
     storage.Set(first_key, John);
     storage.Set(second_key, Jane);
     storage.Set(third_key, storage::value_t("Mary", "Williams", 1982,
-                                        "Philadelphia", 1234L, 5L));
+                                            "Philadelphia", 1234L, 5L));
     std::this_thread::sleep_for(std::chrono::seconds(5));
     ASSERT_EQ(storage.TTL(third_key), "null");
 }
@@ -161,9 +163,12 @@ TEST(delete_suite2, delete_elm_second) {
 
 TEST(FindTest, FindBySurname) {
     storage::Controller storage;
-    storage.Set("1", storage::value_t("Smith", "John", 1990, "New York", 100, 10));
-    storage.Set("2", storage::value_t("Johnson", "Jane", 1985, "London", 200, 20));
-    storage.Set("3", storage::value_t("Smith", "Alice", 1995, "Paris", 150, 15));
+    storage.Set("1",
+                storage::value_t("Smith", "John", 1990, "New York", 100, 10));
+    storage.Set("2",
+                storage::value_t("Johnson", "Jane", 1985, "London", 200, 20));
+    storage.Set("3",
+                storage::value_t("Smith", "Alice", 1995, "Paris", 150, 15));
     storage::optional_value_t value;
     value.surname = "Smith";
     std::vector<std::string> result = storage.Find(value);
@@ -205,9 +210,12 @@ TEST(first_suite, set_get_update) {
 
 TEST(FindTest, FindByCity) {
     storage::Controller storage;
-    storage.Set("1", storage::value_t("Smith", "John", 1990, "New York", 100, 10));
-    storage.Set("2", storage::value_t("Johnson", "Jane", 1985, "London", 200, 20));
-    storage.Set("3", storage::value_t("Smith", "Alice", 1995, "Paris", 150, 15));
+    storage.Set("1",
+                storage::value_t("Smith", "John", 1990, "New York", 100, 10));
+    storage.Set("2",
+                storage::value_t("Johnson", "Jane", 1985, "London", 200, 20));
+    storage.Set("3",
+                storage::value_t("Smith", "Alice", 1995, "Paris", 150, 15));
     storage::optional_value_t value;
     value.city = "Paris";
     std::vector<std::string> result = storage.Find(value);
@@ -251,27 +259,28 @@ TEST(HashTableTest, Rehash) {
     storage::Controller table;
     for (int i = 0; i < 100; ++i) {
         storage::key_t keys = "key" + std::to_string(i);
-        table.Set(keys, storage::value_t("Mary" + std::to_string(i),
-                                     "Williams" + std::to_string(i), 1982 + i,
-                                     "Philadelphia" + std::to_string(i),
-                                     1234L + i, 95 + i));
+        table.Set(keys,
+                  storage::value_t("Mary" + std::to_string(i),
+                                   "Williams" + std::to_string(i), 1982 + i,
+                                   "Philadelphia" + std::to_string(i),
+                                   1234L + i, 95 + i));
     }
     ASSERT_TRUE(table.Get("key55").value() ==
                 storage::value_t("Mary55", "Williams55", 2037, "Philadelphia55",
-                             1289L, 150));
+                                 1289L, 150));
     ASSERT_TRUE(table.Get("key78").value() ==
                 storage::value_t("Mary78", "Williams78", 2060, "Philadelphia78",
-                             1312L, 173));
+                                 1312L, 173));
 
     ASSERT_TRUE(table.Get("key32").value() ==
                 storage::value_t("Mary32", "Williams32", 2014, "Philadelphia32",
-                             1266L, 127));
+                                 1266L, 127));
     ASSERT_TRUE(table.Get("key11").value() ==
                 storage::value_t("Mary11", "Williams11", 1993, "Philadelphia11",
-                             1245L, 106));
+                                 1245L, 106));
     ASSERT_TRUE(table.Get("key65").value() ==
                 storage::value_t("Mary65", "Williams65", 2047, "Philadelphia65",
-                             1299L, 160));
+                                 1299L, 160));
 }
 
 TEST(first_suite, import_export) {
@@ -296,7 +305,7 @@ TEST(first_suite_tree, TTL_hash_table) {
     storage.Set(first_key, John);
     storage.Set(second_key, Jane);
     storage.Set(third_key, storage::value_t("Mary", "Williams", 1982,
-                                        "Philadelphia", 1234L, 5L));
+                                            "Philadelphia", 1234L, 5L));
     std::this_thread::sleep_for(std::chrono::seconds(5));
     ASSERT_EQ(storage.TTL(third_key), "null");
 }
